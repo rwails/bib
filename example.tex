@@ -41,9 +41,14 @@
   }%
 }
 
-\DeclareFieldFormat{title}{\usebibmacro{string+doiurlisbn}{\mkbibemph{#1}}}
 \DeclareFieldFormat[article,inproceedings,report,unpublished]{title}%
     {\usebibmacro{string+doiurlisbn}{\mkbibquote{#1}}}
+
+% IEEE Format:
+% -> articles are quoted in sentence case
+% -> inproceedings are quoted in sentence case
+% -> unpublished are quoted in sentence case
+% -> reports are quoted in sentence case
 
 \AtEveryBibitem{
    \clearfield{pages}
