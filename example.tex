@@ -1,0 +1,64 @@
+\documentclass[11pt, letterpaper, twocolumn]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[american]{babel}
+\usepackage{csquotes, xpatch} % Babel/biblatex wants these
+\usepackage{microtype}
+\microtypecontext{spacing=nonfrench}
+
+\usepackage[
+  backend=bibtex,
+  sorting=nty,
+  mincrossrefs=1000,
+  maxnames=99,
+  date=year,
+  doi=false,
+  eprint=false,
+  isbn=false,
+  style=ieee
+]{biblatex}
+
+\DeclareFieldFormat{eprint}{\textsc{eprint:} \url{#1}}
+
+\newbibmacro{string+doiurlisbn}[1]{%
+  \iffieldundef{doi}{%
+    \iffieldundef{url}{%
+      \iffieldundef{isbn}{%
+        \iffieldundef{eprint}{%
+          #1%
+        }{%
+          \href{\thefield{eprint}}{#1}%
+        }%
+      }{%
+        \href{http://books.google.com/books?vid=ISBN\thefield{isbn}}{#1}%
+      }%
+    }{%
+      \href{\thefield{url}}{#1}%
+    }%
+  }{%
+    \href{http://dx.doi.org/\thefield{doi}}{#1}%
+  }%
+}
+
+\DeclareFieldFormat{title}{\usebibmacro{string+doiurlisbn}{\mkbibemph{#1}}}
+\DeclareFieldFormat[article,inproceedings,report,unpublished]{title}%
+    {\usebibmacro{string+doiurlisbn}{\mkbibquote{#1}}}
+
+\AtEveryBibitem{
+   \clearfield{pages}
+   \clearname{editor}
+   %\clearlist{location}
+   %\clearfield{venue}
+   \clearfield{eventyear}
+}
+
+\bibliography{confs_full.bib, defs_short.bib, books.bib, papers.bib, misc.bib}
+
+\usepackage{hyperref} % Clickable links in the paper
+\usepackage{xurl} % Allow URLs to be broken across lines
+
+\begin{document}
+  \nocite{*}
+  \printbibliography
+\end{document}
